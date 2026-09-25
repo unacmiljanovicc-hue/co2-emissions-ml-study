@@ -1,0 +1,17 @@
+Varijanta,Model,Foldovi,MAE_mean,MAE_std,RMSE_mean,RMSE_std,R²_mean,R²_std
+V1 (Brisanje),Lin. regresija,8,72.9795,23.9163,169.2267,62.4149,0.8616,0.0393
+V1 (Brisanje),Neur. mreža,8,43.1094,13.2703,109.3692,42.1804,0.9320,0.0413
+V1 (Brisanje),Random Forest,8,32.0755,6.2235,126.1369,42.5205,0.9062,0.0529
+V1 (Brisanje),Transformer,8,50.0592,25.6693,139.2676,67.3598,0.8886,0.0994
+V2 (Medijana),Lin. regresija,8,81.6328,6.0318,396.8241,30.9079,0.4640,0.2167
+V2 (Medijana),Neur. mreža,8,100.4000,31.2320,433.6585,95.8619,0.4346,0.0775
+V2 (Medijana),Random Forest,8,24.3627,6.3921,159.9894,84.0936,0.9203,0.0563
+V2 (Medijana),Transformer,8,74.0715,12.1826,397.8371,45.9961,0.4778,0.1811
+V3 (missForest),Lin. regresija,8,50.4058,12.5867,135.9970,29.7553,0.9403,0.0253
+V3 (missForest),Neur. mreža,8,24.6024,1.4286,54.1036,10.9362,0.9899,0.0050
+V3 (missForest),Random Forest,8,16.6183,3.7940,89.7348,42.6542,0.9748,0.0148
+V3 (missForest),Transformer,8,30.7622,13.7323,124.7646,80.3752,0.9401,0.0708
+V4 (MICE temporal),Lin. regresija,8,23.6009,8.1194,64.3322,28.7816,0.9885,0.0042
+V4 (MICE temporal),Neur. mreža,8,21.4794,9.4657,49.5968,25.6422,0.9918,0.0062
+V4 (MICE temporal),Random Forest,8,16.0262,4.1420,82.6863,38.3720,0.9790,0.0130
+V4 (MICE temporal),Transformer,8,27.3331,11.1989,102.7118,65.9004,0.9669,0.0316
