@@ -1,4 +1,4 @@
-# CO₂ Emissions Prediction — Missing-Value Strategies & Model Evaluation
+# CO₂ Emissions Prediction - Missing-Value Strategies & Model Evaluation
 
 Machine-learning study of how missing-value treatment affects annual CO₂-emissions prediction on country-year data. This project originated as my graduation research in Information Systems and Technologies.
 
