@@ -1,38 +1,46 @@
-# CO₂ Emissions Prediction - Missing-Value Strategies & Model Evaluation
+# CO₂ Emissions Prediction
 
-Machine-learning study of how missing-value treatment affects annual CO₂-emissions prediction on country-year data. This project originated as my graduation research in Information Systems and Technologies.
+This project started as my graduation research in Information Systems and Technologies. I wanted to see how different ways of handling missing data affect CO₂ emissions predictions.
 
-## What I explored
+## What I did
 
-The workflow combines Global Carbon Budget emissions data with socioeconomic and energy-related variables from Our World in Data. I compared four missing-value strategies and four predictive models, then evaluated them with time-based rolling-window validation.
+I worked with country-level CO₂ emissions data from the Global Carbon Budget, together with socioeconomic and energy-related data from Our World in Data.
 
-**Imputation strategies**
-- V1 deletion of highly incomplete columns and remaining incomplete rows
-- V2 grouped median imputation, by decade and continent
-- V3 missForest-style iterative imputation (`IterativeImputer` + `RandomForestRegressor`)
-- V4 MICE-style iterative imputation (`IterativeImputer` + `BayesianRidge`) with `Year` added as a predictor
+I tested four different approaches for handling missing values:
 
-**Models**
+- **V1:** removed columns with too many missing values and then removed the remaining incomplete rows
+- **V2:** filled missing values using the median for each decade and continent
+- **V3:** used iterative imputation with `RandomForestRegressor` (missForest-style)
+- **V4:** used iterative imputation with `BayesianRidge` (MICE-style), with `Year` included as an additional predictor
+
+I then tested each version of the dataset with four models:
+
 - Linear Regression
-- MLP neural network 
+- MLP neural network
 - Random Forest
-- Custom Transformer-style model implemented in PyTorch
+- Transformer-style model built in PyTorch
 
-**Evaluation**
-- MAE
-- RMSE
-- R²
-- 8-fold rolling-window validation: 20-year training window, 5-year test window, 5-year step
+For evaluation, I used MAE, RMSE and R². Since this is time-based data, I used rolling-window validation instead of a random train/test split.
 
-## A useful mistake: detecting target leakage
+The setup was:
+- 20 years for training
+- 5 years for testing
+- 5-year step
+- 8 folds in total
 
-An early experiment produced R² values close to 1.0. Investigating the result showed that several input columns directly define or derive from the target `Total` (including fuel/process components and target-derived ratios). Those variables were removed from the predictive feature set before the final comparison.
+## Target leakage
 
-This was an important part of the project because it changed the experimental design rather than simply accepting an unrealistically strong score.
+One of my first results looked suspiciously good, with R² very close to 1.
+
+After checking the features, I found that some columns were directly related to the target variable `Total`. These included individual fuel/process components and ratios calculated from the target.
+
+I removed these columns and reran the experiments.
+
+This ended up being a useful part of the project because it showed how easy it is to get misleadingly good results when information related to the target gets into the feature set.
 
 ## Results
 
-The saved rolling-window experiment showed the MICE-style variant with the highest mean R² within each of the four model families:
+In the saved rolling-window experiments, the MICE-style approach had the highest mean R² for all four models.
 
 | Model | MAE | RMSE | Mean R² |
 |---|---:|---:|---:|
@@ -41,14 +49,17 @@ The saved rolling-window experiment showed the MICE-style variant with the highe
 | Random Forest | 16.0262 | 82.6863 | 0.9790 |
 | Transformer | 27.3331 | 102.7118 | 0.9669 |
 
+The full results, including results for individual folds, are in `results/`.
 
-Full results and fold-level results are available in `results/`.
+## Limitation
 
-## Methodological limitation
+There is one limitation in the way I handled V3 and V4.
 
-V1 and V2 can apply imputation using training-fold information only. In the original experiment, V3 and V4 were iteratively imputed on the full dataset before the rolling-window model evaluation because repeatedly fitting those imputers for every fold was computationally expensive. This can introduce temporal leakage during imputation.
+For V1 and V2, missing values can be handled using only the training data for each fold. For V3 and V4, I ran iterative imputation on the full dataset before rolling-window evaluation because fitting the imputers separately for every fold was computationally expensive.
 
-A natural next step would be to refit each imputer independently inside every training fold and transform the corresponding test fold without using future information.
+This means that some information from later years could influence the imputation of earlier data.
+
+If I continued the project, I would change this by fitting the imputer separately on each training fold and then using it to transform only that fold's test data.
 
 
 Open `notebooks/co2_emissions_ml_study.ipynb` and run the cells in order. The full Transformer rolling-window experiment is intentionally disabled by default because it is computationally intensive; set `RUN_FULL_EXPERIMENT = True` in the notebook to rerun it.
